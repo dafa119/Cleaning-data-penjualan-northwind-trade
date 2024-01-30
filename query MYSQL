@@ -1,0 +1,167 @@
+
+SELECT productname FROM products 
+
+SELECT *
+FROM products
+WHERE productname LIKE '%?%'
+
+SELECT COUNT(productname)
+FROM products
+WHERE productname LIKE '%?%';
+
+UPDATE orders
+JOIN employee ON orders.employeeid = employee.employeeid
+SET orders.employeename = employee.employeename;
+
+-- 1. Tambahkan kolom baru di tabel orders untuk menyimpan employeename
+ALTER TABLE orders ADD COLUMN employeename VARCHAR(255);
+
+-- 2. Perbarui nilai kolom employeename di tabel orders
+UPDATE orders 
+JOIN employees ON orders.employeeid = employees.employeeid
+SET orders.employeename = employees.employeename;
+
+UPDATE orders 
+JOIN shippers ON orders.shipperid = shippers.shipperid
+SET orders.shippingcompany = shippers.companyname;
+
+SELECT *
+FROM orders
+JOIN order_details ON orders.orderid = order_details.orderid;
+
+
+
+UPDATE orders 
+JOIN shippers ON orders.shipperid = shippers.shipperid
+SET orders.shippingcompany = shippers.companyname;
+
+ALTER TABLE orders ADD COLUMN productid INT(11);
+
+UPDATE orders 
+JOIN order_details ON orders.orderid = order_details.orderid
+SET orders.productid = order_details.productid;
+
+ALTER TABLE orders ADD COLUMN unitprice INT(11);
+
+UPDATE orders 
+JOIN order_details ON orders.orderid = order_details.orderid
+SET orders.unitprice = order_details.unitprice;
+
+ALTER TABLE orders ADD COLUMN quantity INT(11);
+
+UPDATE orders 
+JOIN order_details ON orders.orderid = order_details.orderid
+SET orders.quantity = order_details.quantity;
+
+ALTER TABLE orders ADD COLUMN discount INT(11);
+
+UPDATE orders 
+JOIN order_details ON orders.orderid = order_details.orderid
+SET orders.discount = order_details.discount;
+
+ALTER TABLE `orders` ADD `productname` VARCHAR(32) NOT NULL AFTER `productid`, 
+ADD `quantityPerUnit` VARCHAR(20) NOT NULL AFTER `productname`, 
+
+UPDATE orders 
+JOIN products ON orders.productid = products.productid
+SET orders.productname = products.productname;
+
+
+ADD `priceunit` DECIMAL(5,2) NOT NULL AFTER `quantityPerUnit`, 
+
+UPDATE orders 
+JOIN products ON orders.productid = products.productid
+SET orders.quantityperunit = products.quantityperunit;
+
+ADD `discontinued` INT(1) NOT NULL AFTER `priceunit`, 
+
+UPDATE orders 
+JOIN products ON orders.productid = products.productid
+SET orders.priceunit = products.unitprice;
+
+ADD `categoryID` INT(1) NOT NULL AFTER `discontinued`;
+
+UPDATE orders 
+JOIN products ON orders.productid = products.productid
+SET orders.discontinued= products.discontinued;
+
+UPDATE orders 
+JOIN products ON orders.productid = products.productid
+SET orders.categoryid= products.categoryid;
+
+UPDATE orders 
+JOIN categories ON orders.categoryid = categories.categoryid
+SET orders.categoryname= categories.categoryname;
+
+ALTER TABLE `orders` ADD `companyname` VARCHAR(255) NOT NULL AFTER `customerID`, 
+ADD `contactname` VARCHAR(255) NOT NULL AFTER `companyname`, 
+ADD `city` VARCHAR(255) NOT NULL AFTER `contactname`, 
+ADD `country` VARCHAR(255) NOT NULL AFTER `city`;
+
+
+UPDATE orders 
+JOIN customers ON orders.customerid = customers.customerid
+SET orders.companyname= customers.companyName;
+
+UPDATE orders 
+JOIN customers ON orders.customerid = customers.customerid
+SET orders.contactname= customers.contactname;
+
+UPDATE orders 
+JOIN customers ON orders.customerid = customers.customerid
+SET orders.city= customers.city;
+
+UPDATE orders 
+JOIN customers ON orders.customerid = customers.customerid
+SET orders.country= customers.country;
+
+SELECT COUNT(*) AS duplicate_count
+FROM orders
+GROUP BY orderdate
+HAVING COUNT(orderdate) > 1;
+
+SELECT 
+  unitprice * quantity AS total_amount,
+  -- unitprice * quantity/discount AS calculated_value
+FROM orders
+
+SELECT 
+  unitprice * quantity AS total_amount
+FROM orders;
+
+
+-- 1. Tambahkan kolom baru untuk menyimpan hasil perhitungan
+ALTER TABLE orders
+ADD COLUMN total DECIMAL(10, 2);
+
+-- 2. Update nilai kolom baru dengan hasil perhitungan
+UPDATE orders
+SET fterdisc = unitprice * quantity / discount;
+
+SELECT discount * amount FROM orders
+
+ALTER TABLE orders
+ADD COLUMN profit DECIMAL(10, 2);
+
+UPDATE orders
+SET afterdiscount =discount * amount 
+
+UPDATE orders
+SET profit = revenue - total 
+
+SELECT product
+  products.unitprice AS price_1, 
+  order_details.unitprice AS price_2
+FROM products
+JOIN order_details USING (productid);
+
+UPDATE orders 
+JOIN customers ON orders.customerid = customers.customerid
+SET orders.companyname= customers.companyName;
+
+UPDATE orders
+JOIN order_details ON orders.orderid = order_details.orderID
+SET orders.harga = order_details.unitPrice
+
+UPDATE orders
+SET total = amount - totaldiscont
